@@ -14,6 +14,7 @@
 		D537A2912BA2D358009B2AD5 /* AudioEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */; };
 		D537A2942BA2D840009B2AD5 /* AudioEngineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D537A2932BA2D840009B2AD5 /* AudioEngineViewModel.swift */; };
 		D5711AE22BA453C100B5C14D /* help.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D537A2922BA2D4C8009B2AD5 /* help.m4a */; };
+		D5711AE42BA4616100B5C14D /* EQBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5711AE32BA4616100B5C14D /* EQBand.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngineModel.swift; sourceTree = "<group>"; };
 		D537A2922BA2D4C8009B2AD5 /* help.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = help.m4a; sourceTree = "<group>"; };
 		D537A2932BA2D840009B2AD5 /* AudioEngineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngineViewModel.swift; sourceTree = "<group>"; };
+		D5711AE32BA4616100B5C14D /* EQBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EQBand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,10 +59,11 @@
 		D50BD1602B9FE210007947C9 /* Ear Training App */ = {
 			isa = PBXGroup;
 			children = (
+				D50BD1612B9FE210007947C9 /* EarTrainingApp.swift */,
 				D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */,
 				D537A2932BA2D840009B2AD5 /* AudioEngineViewModel.swift */,
-				D50BD1612B9FE210007947C9 /* EarTrainingApp.swift */,
 				D50BD1632B9FE210007947C9 /* AudioEngineView.swift */,
+				D5711AE32BA4616100B5C14D /* EQBand.swift */,
 				D50BD1652B9FE211007947C9 /* Assets.xcassets */,
 				D50BD1672B9FE211007947C9 /* Preview Content */,
 			);
@@ -148,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D537A2942BA2D840009B2AD5 /* AudioEngineViewModel.swift in Sources */,
+				D5711AE42BA4616100B5C14D /* EQBand.swift in Sources */,
 				D537A2912BA2D358009B2AD5 /* AudioEngineModel.swift in Sources */,
 				D50BD1642B9FE210007947C9 /* AudioEngineView.swift in Sources */,
 				D50BD1622B9FE210007947C9 /* EarTrainingApp.swift in Sources */,

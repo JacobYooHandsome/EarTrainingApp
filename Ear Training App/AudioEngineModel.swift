@@ -9,13 +9,38 @@ import Foundation
 import AVFAudio
 
 struct AudioEngineModel {
-    let engine = AVAudioEngine()
-    let player = AVAudioPlayerNode()
+    private let engine = AVAudioEngine()
+    private let player = AVAudioPlayerNode()
+    private let equalizer = AVAudioUnitEQ(numberOfBands: 1)
     
-    var isPlayerReady = false
+    static private var userGain : Float = 9
+
+    private (set) var userBypass : EQBand = .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
+    private (set) var userEQ : EQBand = .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
+    private (set) var target : EQBand
+    
+    static private (set) var allEQBands: [EQBand] = [
+        .init(bandwidth: 1.5, bypass: false, frequency: 63, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 125, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 250, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 500, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 1000, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 2000, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 4000, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 8000, gain: userGain),
+        .init(bandwidth: 1.5, bypass: false, frequency: 16000, gain: userGain),
+    ]
+    
+    private var isPlayerReady = false
     var audioFile : AVAudioFile?
     var needsFileScheduled = true
     var isPlaying = false
+    var disableChoice = true
+    
+    init() {
+        target = AudioEngineModel.instantiateTarget()
+        setupAudio()
+    }
     
     mutating func setupAudio() {
         
@@ -37,32 +62,22 @@ struct AudioEngineModel {
     }
     
     mutating func configureEngine(with format: AVAudioFormat) {
-      engine.attach(player)
+        engine.attach(player)
+        engine.attach(equalizer)
 
-      engine.connect(
-        player,
-        to: engine.mainMixerNode,
-        format: format)
-    
-        guard
-          let file = audioFile
-        else {
-          return
-        }
-        player.scheduleFile(file, at: nil)
+        engine.connect(player, to: equalizer, format: format)
+        engine.connect(equalizer, to: engine.mainMixerNode, format: format)
+        
+        engine.prepare()
+        
         do {
             try engine.start()
+
+            scheduleAudioFile()
+        
         } catch {
-            print("uh oh")
+            print("Error starting the player: \(error.localizedDescription)")
         }
-//      do {
-//        try engine.start()
-//
-//        scheduleAudioFile()
-//        isPlayerReady = true
-//      } catch {
-//        print("Error starting the player: \(error.localizedDescription)")
-//      }
     }
     
     mutating func scheduleAudioFile() {
@@ -96,5 +111,50 @@ struct AudioEngineModel {
         }
         player.play()
       }
+    }
+    
+    func updateEQBand(eqband: EQBand) {
+        equalizer.bands[0].bandwidth = eqband.bandwidth
+        equalizer.bands[0].bypass = eqband.bypass
+        equalizer.bands[0].frequency = eqband.frequency
+        equalizer.bands[0].gain = eqband.gain
+    }
+    
+    func checkEQ() -> Bool {
+        return userEQ.frequency == target.frequency
+    }
+    
+    mutating func updateYourEQ(eqband : EQBand) {
+        userEQ = eqband
+        updateEQBand(eqband: eqband)
+    }
+    
+    mutating func generateTarget() {
+        guard let random = AudioEngineModel.allEQBands.randomElement() else {
+            return
+        }
+        target = random
+    }
+    
+    static func instantiateTarget() -> EQBand {
+        guard let random = AudioEngineModel.allEQBands.randomElement() else {
+            return .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
+        }
+        return random
+    }
+    
+    mutating func toggleBypass() {
+        updateEQBand(eqband: userBypass)
+        disableChoice = true
+    }
+    
+    mutating func toggleTargetEQ() {
+        updateEQBand(eqband: target)
+        disableChoice = true
+    }
+    
+    mutating func toggleUserEQ() {
+        updateEQBand(eqband: userEQ)
+        disableChoice = false
     }
 }
