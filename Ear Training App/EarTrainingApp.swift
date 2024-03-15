@@ -8,10 +8,12 @@
 import SwiftUI
 
 @main
-struct Ear_Training_AppApp: App {
+struct EarTrainingApp: App {
+    @StateObject var audioEngine = AudioEngineViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AudioEngineView(viewModel: audioEngine)
         }
     }
 }
