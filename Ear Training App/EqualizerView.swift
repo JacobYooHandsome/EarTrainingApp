@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct AudioEngineView: View {
-    @ObservedObject var viewModel: AudioEngineViewModel
+struct EqualizerView: View {
+    @ObservedObject var viewModel: EqualizerViewModel
     
     var body: some View {
         NavigationStack{
@@ -100,5 +100,5 @@ struct AudioEngineView: View {
 }
 
 #Preview {
-    AudioEngineView(viewModel: AudioEngineViewModel())
+    EqualizerView(viewModel: EqualizerViewModel())
 }
