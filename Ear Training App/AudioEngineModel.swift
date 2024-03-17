@@ -14,21 +14,22 @@ struct AudioEngineModel {
     private let equalizer = AVAudioUnitEQ(numberOfBands: 1)
     
     static private var userGain : Float = 9
+    static private var bandwidth : Float = 2.0
 
-    private (set) var userBypass : EQBand = .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
-    private (set) var userEQ : EQBand = .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
+    private (set) var userBypass : EQBand = .init(bandwidth: bandwidth, bypass: true, frequency: 63, gain: 0)
+    private (set) var userEQ : EQBand = .init(bandwidth: bandwidth, bypass: true, frequency: 63, gain: 0)
     private (set) var target : EQBand
     
     static private (set) var allEQBands: [EQBand] = [
-        .init(bandwidth: 1.5, bypass: false, frequency: 63, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 125, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 250, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 500, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 1000, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 2000, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 4000, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 8000, gain: userGain),
-        .init(bandwidth: 1.5, bypass: false, frequency: 16000, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 63, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 125, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 250, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 500, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 1000, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 2000, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 4000, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 8000, gain: userGain),
+        .init(bandwidth: bandwidth, bypass: false, frequency: 16000, gain: userGain),
     ]
     
     private var isPlayerReady = false
@@ -144,8 +145,7 @@ struct AudioEngineModel {
     }
     
     mutating func toggleBypass() {
-        updateEQBand(eqband: userBypass)
-        disableChoice = true
+        equalizer.bypass = !equalizer.bypass
     }
     
     mutating func toggleTargetEQ() {
