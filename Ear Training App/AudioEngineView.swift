@@ -9,17 +9,16 @@ import SwiftUI
 
 struct AudioEngineView: View {
     @ObservedObject var viewModel: AudioEngineViewModel
-    @State private var clickedButtonIndex = 0
-    @State private var revealAnswer = false
-    @State private var color = Color.blue
     
     var body: some View {
         NavigationStack{
             VStack {
-                if color == Color.green {
-                    Text("CORRECT!!!")
-                } else if color == Color.red {
-                    Text("WRONGG!!! review your answer...")
+                if let correct = viewModel.correct {
+                    if correct {
+                        Text("CORRECT!!!")
+                    } else {
+                        Text("WRONGG!!! review your answer...")
+                    }
                 }
                 Button("PLAYorPAUSE") {
                     viewModel.playOrPause()
@@ -41,42 +40,54 @@ struct AudioEngineView: View {
                 .frame(width: 400)
                 .disabled(viewModel.disableChoice)
                 
-                if revealAnswer {
+                if viewModel.revealAnswer {
                     Text("TARGET: \(viewModel.target.frequency)")
                 }
                 HStack {
-                    SelectButton(title: "TARGET EQ", index: 1, selectedButtonIndex: $clickedButtonIndex) {
+                    Button("TARGET EQ") {
                         viewModel.toggleTargetEQ()
                     }
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(viewModel.targetEQBandOn ? .red : .blue)
+                    .cornerRadius(8)
                     Spacer()
-                    SelectButton(title: "BYPASS", index: 2, selectedButtonIndex: $clickedButtonIndex) {
+                    Button("BYPASS") {
                         viewModel.toggleBypass()
                     }
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(.blue)
+                    .cornerRadius(8)
                     Spacer()
-                    SelectButton(title: "YOUR EQ", index: 3, selectedButtonIndex: $clickedButtonIndex) {
+                    Button("YOUR EQ") {
                         viewModel.toggleUserEQ()
                     }
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(viewModel.userEQBandOn ? .red : .blue)
+                    .cornerRadius(8)
                 }
-                
-                Button("SUBMIT") {
-                    revealAnswer = true
-                    if viewModel.checkEQ() {
-                        color = .green
-                    } else {
-                        color = .red
+                if let correct = viewModel.correct {
+                    Button("SUBMIT") {
+                        viewModel.checkEQ()
                     }
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(correct ? Color.green : Color.red)
+                    .cornerRadius(8)
+                } else {
+                    Button("SUBMIT") {
+                        viewModel.checkEQ()
+                    }
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(.blue)
+                    .cornerRadius(8)
                 }
-                .padding()
-                .foregroundColor(.white)
-                .background(color)
-                .cornerRadius(8)
-                
                 Button("NEXT QUESTION") {
                     viewModel.generateQuestion()
-                    viewModel.updateYourEQ(eqband: viewModel.userBypass)
-                    clickedButtonIndex = 0
-                    revealAnswer = false
-                    color = .blue
+                    viewModel.toggleBypass()
                 }
                 .padding()
                 .foregroundColor(.white)
@@ -85,27 +96,6 @@ struct AudioEngineView: View {
             }
             .padding()
         }
-    }
-}
-
-struct SelectButton: View {
-    var title: String
-    var index: Int
-    @Binding var selectedButtonIndex: Int
-    var action: () -> Void
-
-    var body: some View {
-        Button(action: {
-            self.selectedButtonIndex = index
-            self.action()
-        }) {
-            Text(title)
-                .padding()
-                .foregroundColor(.white)
-                .background(selectedButtonIndex == index ? Color.red : Color.blue)
-                .cornerRadius(8)
-        }
-        .padding()
     }
 }
 
