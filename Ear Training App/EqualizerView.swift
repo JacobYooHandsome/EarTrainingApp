@@ -28,10 +28,10 @@ struct EqualizerView: View {
                 .background(Color.blue)
                 .cornerRadius(8)
                 
-                Picker("EQ", selection: $viewModel.pickerNumber) {
-                    ForEach(0..<viewModel.allEQBands.count, id: \.self) {
+                Picker("EQ", selection: $viewModel.frequencyPickerNumber) {
+                    ForEach(0..<viewModel.frequencies.count, id: \.self) {
 
-                        Text(String(Int(viewModel.allEQBands[$0].frequency)))
+                        Text(String(Int(viewModel.frequencies[$0])))
                   }
                 }
                 .pickerStyle(SegmentedPickerStyle())

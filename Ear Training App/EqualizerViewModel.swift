@@ -7,38 +7,36 @@
 
 import AVFAudio
 
-class AudioEngineViewModel : ObservableObject {
-    @Published private var model = AudioEngineModel()
+class EqualizerViewModel : ObservableObject {
+    @Published private var audioEngineModel = AudioEngineModel()
+    @Published private var equalizerModel = EqualizerModel()
     
     // All copied variables from model
-    var allEQBands : [EQBand] { AudioEngineModel.allEQBands }
-    var target : EQBand { model.target }
-    var userEQ : EQBand { model.userEQ }
-    var disableChoice : Bool { model.disableChoice }
-    var revealAnswer : Bool { model.revealAnswer }
-    var correct : Bool? { model.correct }
-    var userEQBandOn : Bool { model.userEQBandOn }
-    var targetEQBandOn : Bool { model.targetEQBandOn }
-    var bypassOn : Bool { model.bypassOn }
+    var frequencies : [Float] { EqualizerModel.frequencies }
+    var target : EQBand { equalizerModel.target }
+    var userEQ : EQBand { equalizerModel.userEQ }
+    var disableChoice : Bool { equalizerModel.disableChoice }
+    var revealAnswer : Bool { equalizerModel.revealAnswer }
+    var correct : Bool? { equalizerModel.correct }
+    var userEQBandOn : Bool { equalizerModel.userEQBandOn }
+    var targetEQBandOn : Bool { equalizerModel.targetEQBandOn }
     
     // ViewModel specific variables
-    var pickerNumber = 1 { didSet { updateYourEQ(eqband: allEQBands[pickerNumber]) } }
+    var frequencyPickerNumber = 1 { didSet { equalizerModel.updateUserEQFrequency(index: frequencyPickerNumber) } }
     
     // MARK: - Intents
     
-    func playOrPause() { model.playOrPause() }
+    func playOrPause() { audioEngineModel.playOrPause() }
     
-    func changeEQ(eqband : EQBand) { model.updateEQBand(eqband: eqband) }
+    func loadEQBand(eqband : EQBand) { EqualizerModel.loadEQBand(eqband: eqband) }
     
-    func updateYourEQ(eqband : EQBand) { model.updateYourEQ(eqband: eqband) }
+    func toggleBypass() { equalizerModel.toggleBypass() }
     
-    func toggleBypass() { model.toggleBypass() }
+    func toggleTargetEQ() { equalizerModel.toggleTargetEQ() }
     
-    func toggleTargetEQ() { model.toggleTargetEQ() }
+    func toggleUserEQ() { equalizerModel.toggleUserEQ() }
     
-    func toggleUserEQ() { model.toggleUserEQ() }
+    func generateQuestion() { equalizerModel.generateTarget() }
     
-    func generateQuestion() { model.generateTarget() }
-    
-    func checkEQ() { model.checkEQ() }
+    func checkEQ() { equalizerModel.checkEQ() }
 }
