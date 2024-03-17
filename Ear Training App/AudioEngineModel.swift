@@ -9,16 +9,27 @@ import Foundation
 import AVFAudio
 
 struct AudioEngineModel {
+    // All the audio playing and engine variables needed
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()
     private let equalizer = AVAudioUnitEQ(numberOfBands: 1)
+    private var isPlayerReady = false
+    private var audioFile : AVAudioFile?
+    private var needsFileScheduled = true
+    private var isPlaying = false
     
+    // Variables related to the view
+    private (set) var disableChoice = true
+    private (set) var revealAnswer = false
+    private (set) var correct : Bool?
+    
+    // All the EQBand variables
     static private var userGain : Float = 9
-
-    private (set) var userBypass : EQBand = .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
     private (set) var userEQ : EQBand = .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0)
     private (set) var target : EQBand
-    
+    private (set) var bypassOn = false
+    private (set) var userEQBandOn = false
+    private (set) var targetEQBandOn = false
     static private (set) var allEQBands: [EQBand] = [
         .init(bandwidth: 1.5, bypass: false, frequency: 63, gain: userGain),
         .init(bandwidth: 1.5, bypass: false, frequency: 125, gain: userGain),
@@ -31,12 +42,7 @@ struct AudioEngineModel {
         .init(bandwidth: 1.5, bypass: false, frequency: 16000, gain: userGain),
     ]
     
-    private var isPlayerReady = false
-    var audioFile : AVAudioFile?
-    var needsFileScheduled = true
-    var isPlaying = false
-    var disableChoice = true
-    
+    // initalizes the targetEQ question and sets up the audio
     init() {
         target = AudioEngineModel.instantiateTarget()
         setupAudio()
@@ -120,8 +126,9 @@ struct AudioEngineModel {
         equalizer.bands[0].gain = eqband.gain
     }
     
-    func checkEQ() -> Bool {
-        return userEQ.frequency == target.frequency
+    mutating func checkEQ() {
+        revealAnswer = true
+        correct = userEQ.frequency == target.frequency
     }
     
     mutating func updateYourEQ(eqband : EQBand) {
@@ -133,7 +140,9 @@ struct AudioEngineModel {
         guard let random = AudioEngineModel.allEQBands.randomElement() else {
             return
         }
+        revealAnswer = false
         target = random
+        correct = nil
     }
     
     static func instantiateTarget() -> EQBand {
@@ -144,17 +153,23 @@ struct AudioEngineModel {
     }
     
     mutating func toggleBypass() {
-        updateEQBand(eqband: userBypass)
+        updateEQBand(eqband: .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0))
         disableChoice = true
+        userEQBandOn = false
+        targetEQBandOn = false
     }
     
     mutating func toggleTargetEQ() {
         updateEQBand(eqband: target)
         disableChoice = true
+        userEQBandOn = false
+        targetEQBandOn = true
     }
     
     mutating func toggleUserEQ() {
         updateEQBand(eqband: userEQ)
         disableChoice = false
+        userEQBandOn = true
+        targetEQBandOn = false
     }
 }
