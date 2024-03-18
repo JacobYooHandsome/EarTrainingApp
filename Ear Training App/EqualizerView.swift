@@ -30,7 +30,6 @@ struct EqualizerView: View {
                 
                 Picker("EQ", selection: $viewModel.frequencyPickerNumber) {
                     ForEach(0..<viewModel.frequencies.count, id: \.self) {
-
                         Text(String(Int(viewModel.frequencies[$0])))
                   }
                 }
