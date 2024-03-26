@@ -32,7 +32,7 @@ class EqualizerViewModel : ObservableObject {
     
     func playOrPause() { audioEngineModel.playOrPause() }
     
-    func loadEQBand(eqband : EQBand) { EqualizerModel.loadEQBand(eqband: eqband) }
+    func loadEQBand(eqband : EQBand) { equalizerModel.loadEQBand(eqband: eqband) }
     
     func toggleBypass() { equalizerModel.toggleBypass() }
     
