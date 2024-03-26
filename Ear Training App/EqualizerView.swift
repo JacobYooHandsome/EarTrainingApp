@@ -13,6 +13,7 @@ struct EqualizerView: View {
     var body: some View {
         NavigationStack{
             VStack {
+                
                 if let correct = viewModel.correct {
                     if correct {
                         Text("CORRECT!!!")
@@ -20,6 +21,19 @@ struct EqualizerView: View {
                         Text("WRONGG!!! review your answer...")
                     }
                 }
+                
+                Text("Frequency: " + String(Int(viewModel.frequencies[Int(viewModel.frequencyPickerNumber)])))
+                Slider(value: $viewModel.frequencyPickerNumber, in: 0...Double(viewModel.frequencies.count - 1), step: 1)
+                    .disabled(viewModel.disableChoice)
+                
+                Text("Gain: " + String(Int(viewModel.gainValues[Int(viewModel.gainPickerNumber)])))
+                Slider(value: $viewModel.gainPickerNumber, in: 0...Double(viewModel.gainValues.count - 1), step: 1)
+                    .disabled(viewModel.disableChoice)
+                
+                Text("Bandwidth: " + String(viewModel.bandwidths[Int(viewModel.bandwidthPickerNumber)]))
+                Slider(value: $viewModel.bandwidthPickerNumber, in: 0...Double(viewModel.bandwidths.count - 1), step: 1)
+                    .disabled(viewModel.disableChoice)
+                
                 Button("PLAYorPAUSE") {
                     viewModel.playOrPause()
                 }
@@ -28,16 +42,6 @@ struct EqualizerView: View {
                 .background(Color.blue)
                 .cornerRadius(8)
                 
-                Picker("EQ", selection: $viewModel.frequencyPickerNumber) {
-                    ForEach(0..<viewModel.frequencies.count, id: \.self) {
-                        Text(String(Int(viewModel.frequencies[$0])))
-                  }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.bottom, 20)
-                .lineLimit(nil)
-                .frame(width: 400)
-                .disabled(viewModel.disableChoice)
                 
                 if viewModel.revealAnswer {
                     Text("TARGET: \(viewModel.target.frequency)")
@@ -66,6 +70,7 @@ struct EqualizerView: View {
                     .foregroundColor(.white)
                     .background(viewModel.userEQBandOn ? .red : .blue)
                     .cornerRadius(8)
+                    
                 }
                 if let correct = viewModel.correct {
                     Button("SUBMIT") {
