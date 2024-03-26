@@ -28,7 +28,7 @@ struct EqualizerModel {
     }
     private (set) var target : EQBand
     private (set) var userEQBandOn = false
-    private (set) var targetEQBandOn = false
+    private (set) var targetEQBandOn = true
     
     // initalizes the targetEQ question and sets up the audio
     init() {

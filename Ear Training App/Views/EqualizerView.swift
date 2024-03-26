@@ -59,10 +59,20 @@ struct EqualizerView: View {
         ZStack {
             NavigationStack{
                 VStack {
+                    
+                    if let correct = viewModel.correct {
+                        if correct {
+                            Text("CORRECT!!!")
+                        } else {
+                            Text("WRONGG!!! review your answer...")
+                        }
+                    }
+                    
                     HStack {
                         if let correct = viewModel.correct {
-                            Button("SUBMIT") {
-                                viewModel.checkEQ()
+                            Button("NEXT QUESTION") {
+                                viewModel.generateQuestion()
+                                viewModel.toggleBypass()
                             }
                             .padding()
                             .foregroundColor(.white)
@@ -76,23 +86,6 @@ struct EqualizerView: View {
                             .foregroundColor(.white)
                             .background(.blue)
                             .cornerRadius(8)
-                        }
-                        Button("NEXT QUESTION") {
-                            viewModel.generateQuestion()
-                            viewModel.toggleBypass()
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color.blue)
-                        .cornerRadius(8)
-                    }
-                    
-                    
-                    if let correct = viewModel.correct {
-                        if correct {
-                            Text("CORRECT!!!")
-                        } else {
-                            Text("WRONGG!!! review your answer...")
                         }
                     }
                     
@@ -137,6 +130,7 @@ struct EqualizerView: View {
                         .cornerRadius(8)
                         
                     }
+                    
                     Button("PLAYorPAUSE") {
                         viewModel.playOrPause()
                     }
