@@ -20,8 +20,12 @@ class EqualizerViewModel : ObservableObject {
     var disableChoice : Bool { equalizerModel.disableChoice }
     var revealAnswer : Bool { equalizerModel.revealAnswer }
     var correct : Bool? { equalizerModel.correct }
-    var userEQBandOn : Bool { equalizerModel.userEQBandOn }
-    var targetEQBandOn : Bool { equalizerModel.targetEQBandOn }
+    
+    var loadedEQIndex : Int = 0 {
+        didSet{
+            equalizerModel.chooseLoadEQBand(index: loadedEQIndex)
+        }
+    }
     
     var frequencyPickerNumber : Double = 0 {
         didSet{

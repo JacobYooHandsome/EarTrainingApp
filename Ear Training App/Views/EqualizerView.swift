@@ -13,10 +13,11 @@ struct EqualizerSideBarSettings: View {
             Color(.gray)
             
             VStack(alignment: .leading, spacing: 0) {
-                Text("FREQUENCY")
-                Text("BANDWIDTH")
-                Text("FREQUENCY RANGE")
-                Text("VOLUME")
+                Text("Frequency Resolution")
+                Text("Bandwidth")
+                Text("Frequency Range")
+                Text("Gain Range")
+                Text("Number of Bands")
                 Spacer()
             }
             .safeAreaPadding(.top, 50)
@@ -104,32 +105,14 @@ struct EqualizerView: View {
                     if viewModel.revealAnswer {
                         Text("TARGET: \(viewModel.target.frequency)")
                     }
-                    HStack {
-                        Button("TARGET EQ") {
-                            viewModel.toggleTargetEQ()
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(viewModel.targetEQBandOn ? .red : .blue)
-                        .cornerRadius(8)
-                        Spacer()
-                        Button("BYPASS") {
-                            viewModel.toggleBypass()
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(.blue)
-                        .cornerRadius(8)
-                        Spacer()
-                        Button("YOUR EQ") {
-                            viewModel.toggleUserEQ()
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(viewModel.userEQBandOn ? .red : .blue)
-                        .cornerRadius(8)
-                        
+                    
+                    Picker("Select an EQ:", selection: $viewModel.loadedEQIndex) {
+                        Text("TARGET EQ").tag(0)
+                        Text("BYPASS").tag(1)
+                        Text("USER EQ").tag(2)
                     }
+                    .labelsHidden()
+                    .pickerStyle(SegmentedPickerStyle())
                     
                     Button("PLAYorPAUSE") {
                         viewModel.playOrPause()

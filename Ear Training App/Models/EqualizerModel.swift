@@ -27,8 +27,6 @@ struct EqualizerModel {
         }
     }
     private (set) var target : EQBand
-    private (set) var userEQBandOn = false
-    private (set) var targetEQBandOn = true
     
     // initalizes the targetEQ question and sets up the audio
     init() {
@@ -68,25 +66,29 @@ struct EqualizerModel {
         correct = nil
     }
     
+    mutating func chooseLoadEQBand(index: Int) {
+        if index == 0 {
+            toggleTargetEQ()
+        } else if index == 1 {
+            toggleBypass()
+        } else {
+            toggleUserEQ()
+        }
+    }
+    
     mutating func toggleBypass() {
         loadEQBand(eqband: .init(bandwidth: 1.5, bypass: true, frequency: 63, gain: 0))
         disableChoice = true
-        userEQBandOn = false
-        targetEQBandOn = false
     }
     
     mutating func toggleTargetEQ() {
         loadEQBand(eqband: target)
         disableChoice = true
-        userEQBandOn = false
-        targetEQBandOn = true
     }
     
     mutating func toggleUserEQ() {
         loadEQBand(eqband: userEQ)
         disableChoice = false
-        userEQBandOn = true
-        targetEQBandOn = false
     }
     
     static func returnEqualizer() -> AVAudioUnit {
