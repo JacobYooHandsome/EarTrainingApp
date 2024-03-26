@@ -22,9 +22,9 @@ class EqualizerViewModel : ObservableObject {
     var targetEQBandOn : Bool { equalizerModel.targetEQBandOn }
     
     // ViewModel specific variables
-    var frequencyPickerNumber = 1 {
+    var frequencyPickerNumber : Double = 1 {
         didSet{
-            equalizerModel.updateUserEQFrequency(index: frequencyPickerNumber)
+            equalizerModel.updateUserEQFrequency(index: Int(frequencyPickerNumber))
         }
     }
     

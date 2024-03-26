@@ -13,6 +13,9 @@
 		D50BD1692B9FE211007947C9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D50BD1682B9FE211007947C9 /* Preview Assets.xcassets */; };
 		D537A2912BA2D358009B2AD5 /* AudioEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */; };
 		D537A2942BA2D840009B2AD5 /* EqualizerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D537A2932BA2D840009B2AD5 /* EqualizerViewModel.swift */; };
+		D55BD3C22BB24D2A001D48A1 /* LogicKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55BD3C12BB24D2A001D48A1 /* LogicKnob.swift */; };
+		D55BD3C52BB24D58001D48A1 /* Controls in Frameworks */ = {isa = PBXBuildFile; productRef = D55BD3C42BB24D58001D48A1 /* Controls */; };
+		D55BD3C92BB25159001D48A1 /* CircularSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55BD3C82BB25159001D48A1 /* CircularSlider.swift */; };
 		D5711AE22BA453C100B5C14D /* help.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D537A2922BA2D4C8009B2AD5 /* help.m4a */; };
 		D5711AE42BA4616100B5C14D /* EQBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5711AE32BA4616100B5C14D /* EQBand.swift */; };
 		D5B996482BA778B600084888 /* EqualizerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B996472BA778B600084888 /* EqualizerModel.swift */; };
@@ -27,6 +30,8 @@
 		D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngineModel.swift; sourceTree = "<group>"; };
 		D537A2922BA2D4C8009B2AD5 /* help.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = help.m4a; sourceTree = "<group>"; };
 		D537A2932BA2D840009B2AD5 /* EqualizerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerViewModel.swift; sourceTree = "<group>"; };
+		D55BD3C12BB24D2A001D48A1 /* LogicKnob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogicKnob.swift; sourceTree = "<group>"; };
+		D55BD3C82BB25159001D48A1 /* CircularSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularSlider.swift; sourceTree = "<group>"; };
 		D5711AE32BA4616100B5C14D /* EQBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EQBand.swift; sourceTree = "<group>"; };
 		D5B996472BA778B600084888 /* EqualizerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D55BD3C52BB24D58001D48A1 /* Controls in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +73,8 @@
 				D537A2932BA2D840009B2AD5 /* EqualizerViewModel.swift */,
 				D50BD1632B9FE210007947C9 /* EqualizerView.swift */,
 				D5711AE32BA4616100B5C14D /* EQBand.swift */,
+				D55BD3C12BB24D2A001D48A1 /* LogicKnob.swift */,
+				D55BD3C82BB25159001D48A1 /* CircularSlider.swift */,
 				D50BD1652B9FE211007947C9 /* Assets.xcassets */,
 				D50BD1672B9FE211007947C9 /* Preview Content */,
 			);
@@ -98,6 +106,9 @@
 			dependencies = (
 			);
 			name = "Ear Training App";
+			packageProductDependencies = (
+				D55BD3C42BB24D58001D48A1 /* Controls */,
+			);
 			productName = "Ear Training App";
 			productReference = D50BD15E2B9FE210007947C9 /* Ear Training App.app */;
 			productType = "com.apple.product-type.application";
@@ -126,6 +137,9 @@
 				Base,
 			);
 			mainGroup = D50BD1552B9FE210007947C9;
+			packageReferences = (
+				D55BD3C32BB24D58001D48A1 /* XCRemoteSwiftPackageReference "Controls" */,
+			);
 			productRefGroup = D50BD15F2B9FE210007947C9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -154,11 +168,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D537A2942BA2D840009B2AD5 /* EqualizerViewModel.swift in Sources */,
+				D55BD3C22BB24D2A001D48A1 /* LogicKnob.swift in Sources */,
 				D5711AE42BA4616100B5C14D /* EQBand.swift in Sources */,
 				D537A2912BA2D358009B2AD5 /* AudioEngineModel.swift in Sources */,
 				D50BD1642B9FE210007947C9 /* EqualizerView.swift in Sources */,
 				D5B996482BA778B600084888 /* EqualizerModel.swift in Sources */,
 				D50BD1622B9FE210007947C9 /* EarTrainingApp.swift in Sources */,
+				D55BD3C92BB25159001D48A1 /* CircularSlider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +378,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D55BD3C32BB24D58001D48A1 /* XCRemoteSwiftPackageReference "Controls" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AudioKit/Controls";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D55BD3C42BB24D58001D48A1 /* Controls */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D55BD3C32BB24D58001D48A1 /* XCRemoteSwiftPackageReference "Controls" */;
+			productName = Controls;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D50BD1562B9FE210007947C9 /* Project object */;
 }
