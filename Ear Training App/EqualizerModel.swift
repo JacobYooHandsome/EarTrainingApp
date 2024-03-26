@@ -16,12 +16,12 @@ struct EqualizerModel {
     private (set) var correct : Bool?
     
     // All the EQBand variables
-    static private var userGain : Float = 9
-    static private var bandwidth : Float = 1.5
+    static private (set) var gainValues : [Float] = [-9, -6, -3, 0, 3, 6, 9]
+    static private (set) var bandwidths : [Float] = [1.5, 3.0]
     static private (set) var frequencies : [Float] = [63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
     //static private var frequencies2 : [Float] = [63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000]
-
-    private (set) var userEQ : EQBand = .init(bandwidth: bandwidth, bypass: false, frequency: 63, gain: userGain) {
+    
+    private (set) var userEQ : EQBand = .init(bandwidth: 1.5, bypass: false, frequency: 63, gain: 9) {
         didSet {
             loadEQBand(eqband: userEQ)
         }
@@ -32,7 +32,7 @@ struct EqualizerModel {
     
     // initalizes the targetEQ question and sets up the audio
     init() {
-        target = EQBand.init(bandwidth: 1.5, bypass: false, frequency: EqualizerModel.frequencies.randomElement() ?? 1000, gain: EqualizerModel.userGain)
+        target = EQBand.init(bandwidth: 1.5, bypass: false, frequency: EqualizerModel.frequencies.randomElement() ?? 1000, gain: 9)
     }
     
     func loadEQBand(eqband: EQBand) {
@@ -44,6 +44,14 @@ struct EqualizerModel {
     
     mutating func updateUserEQFrequency(index: Int) {
         userEQ.frequency = EqualizerModel.frequencies[index]
+    }
+    
+    mutating func updateUserEQGain(index: Int) {
+        userEQ.gain = EqualizerModel.gainValues[index]
+    }
+    
+    mutating func updateUserEQBandwidth(index: Int) {
+        userEQ.bandwidth = EqualizerModel.bandwidths[index]
     }
     
     mutating func checkEQ() {

@@ -26,6 +26,13 @@ struct EqualizerView: View {
                 Slider(value: $viewModel.frequencyPickerNumber, in: 0...Double(viewModel.frequencies.count - 1), step: 1)
                     .disabled(viewModel.disableChoice)
                 
+                Text("Gain: " + String(Int(viewModel.gainValues[Int(viewModel.gainPickerNumber)])))
+                Slider(value: $viewModel.gainPickerNumber, in: 0...Double(viewModel.gainValues.count - 1), step: 1)
+                    .disabled(viewModel.disableChoice)
+                
+                Text("Bandwidth: " + String(viewModel.bandwidths[Int(viewModel.bandwidthPickerNumber)]))
+                Slider(value: $viewModel.bandwidthPickerNumber, in: 0...Double(viewModel.bandwidths.count - 1), step: 1)
+                    .disabled(viewModel.disableChoice)
                 
                 Button("PLAYorPAUSE") {
                     viewModel.playOrPause()

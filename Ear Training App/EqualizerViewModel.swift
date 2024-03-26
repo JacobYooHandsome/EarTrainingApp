@@ -13,6 +13,8 @@ class EqualizerViewModel : ObservableObject {
     
     // All copied variables from model
     var frequencies : [Float] { EqualizerModel.frequencies }
+    var gainValues : [Float] { EqualizerModel.gainValues }
+    var bandwidths : [Float] { EqualizerModel.bandwidths }
     var target : EQBand { equalizerModel.target }
     var userEQ : EQBand { equalizerModel.userEQ }
     var disableChoice : Bool { equalizerModel.disableChoice }
@@ -21,10 +23,19 @@ class EqualizerViewModel : ObservableObject {
     var userEQBandOn : Bool { equalizerModel.userEQBandOn }
     var targetEQBandOn : Bool { equalizerModel.targetEQBandOn }
     
-    // ViewModel specific variables
-    var frequencyPickerNumber : Double = 1 {
+    var frequencyPickerNumber : Double = 0 {
         didSet{
             equalizerModel.updateUserEQFrequency(index: Int(frequencyPickerNumber))
+        }
+    }
+    var gainPickerNumber : Double = 6 {
+        didSet{
+            equalizerModel.updateUserEQGain(index: Int(gainPickerNumber))
+        }
+    }
+    var bandwidthPickerNumber : Double = 0 {
+        didSet{
+            equalizerModel.updateUserEQBandwidth(index: Int(bandwidthPickerNumber))
         }
     }
     
