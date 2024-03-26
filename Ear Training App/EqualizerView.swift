@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct AudioEngineView: View {
-    @ObservedObject var viewModel: AudioEngineViewModel
+struct EqualizerView: View {
+    @ObservedObject var viewModel: EqualizerViewModel
     
     var body: some View {
         NavigationStack{
@@ -28,10 +28,9 @@ struct AudioEngineView: View {
                 .background(Color.blue)
                 .cornerRadius(8)
                 
-                Picker("EQ", selection: $viewModel.pickerNumber) {
-                    ForEach(0..<viewModel.allEQBands.count, id: \.self) {
-
-                        Text(String(Int(viewModel.allEQBands[$0].frequency)))
+                Picker("EQ", selection: $viewModel.frequencyPickerNumber) {
+                    ForEach(0..<viewModel.frequencies.count, id: \.self) {
+                        Text(String(Int(viewModel.frequencies[$0])))
                   }
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -100,5 +99,5 @@ struct AudioEngineView: View {
 }
 
 #Preview {
-    AudioEngineView(viewModel: AudioEngineViewModel())
+    EqualizerView(viewModel: EqualizerViewModel())
 }

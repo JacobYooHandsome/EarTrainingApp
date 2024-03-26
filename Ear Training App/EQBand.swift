@@ -8,8 +8,8 @@
 import Foundation
 
 struct EQBand {
-    let bandwidth: Float
-    let bypass: Bool
-    let frequency: Float
-    let gain: Float
+    var bandwidth: Float
+    var bypass: Bool
+    var frequency: Float
+    var gain: Float
 }

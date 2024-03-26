@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct EarTrainingApp: App {
-    @StateObject var audioEngine = AudioEngineViewModel()
+    @StateObject var equalizerViewModel = EqualizerViewModel()
     
     var body: some Scene {
         WindowGroup {
-            AudioEngineView(viewModel: audioEngine)
+            EqualizerView(viewModel: equalizerViewModel)
         }
     }
 }
