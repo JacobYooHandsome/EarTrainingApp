@@ -24,8 +24,10 @@ struct EqualizerModel {
     static private (set) var bandwidths: [Float] = [1.5, 3.0]
     static private (set) var frequencies: [Float] = [63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
     
+    // Settings change
     private (set) var frequencyResolutions: [Float] = [1, 1/3]
     private (set) var gainRanges: [[Float]] = [[0, 9], [0, 6], [0, 3], [-3, 0], [-6, 0], [-9, 0], [-9, 0, 9], [-6, 0, 6], [-3, 0, 3], [-9, -6, -3, 0, 3, 6, 9]]
+    private (set) var bandWidthPicker: Int = 0
     
     // if the userEQBand is changed, then load the new changes into the Equalizer
     private (set) var userEQ: EQBand = .init(bandwidth: 1.5, bypass: false, frequency: 63, gain: 9) {
@@ -77,9 +79,15 @@ struct EqualizerModel {
         revealAnswer = false
         targetEQ.frequency = randomFreq
         targetEQ.gain = randomGain
+        targetEQ.bandwidth = EqualizerModel.bandwidths[bandWidthPicker]
         correct = nil
     }
     
+    mutating func togglePlayStartGame() {
+        start = true
+    }
+    
+    // Settings Change
     mutating func changeGameFrequencyResolution(octave: Float) {
         if octave == 1 {
             EqualizerModel.frequencies = [63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
@@ -95,8 +103,10 @@ struct EqualizerModel {
         generateTarget()
     }
     
-    mutating func togglePlayStartGame() {
-        start = true
+    mutating func changeGameBandWidth(index: Int) {
+        bandWidthPicker = index
+        userEQ.bandwidth = EqualizerModel.bandwidths[index]
+        generateTarget()
     }
     
     // Involved in toggling the EQ

@@ -7,138 +7,6 @@
 
 import SwiftUI
 
-extension Float {
-    func decimalConversion(_ number: Int) -> String {
-        String(self.formatted(.number.precision(.fractionLength(number))))
-    }
-}
-
-struct EqualizerSideBarSettings: View {
-    @ObservedObject var viewModel: EqualizerViewModel
-    
-    var body: some View {
-        ZStack {
-            Color(.darkGray)
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Frequency Resolution").bold()
-                Picker(selection: $viewModel.frequencyResolutionPicker, content: {
-                    ForEach(viewModel.frequencyResolutions, id:\.self) { reso in
-                        if reso == 1 {
-                            Text("1 Octave").tag(reso)
-                        } else {
-                            Text("1/3 Octave").tag(reso)
-                        }
-                    }
-                }, label: {EmptyView()})
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(2)
-                
-                Divider()
-                    .overlay(Color.white)
-                
-                Text("Gain Range").bold()
-                Picker(selection: $viewModel.gainRangePicker, content: {
-                    ForEach(viewModel.gainRanges, id:\.self) { range in
-                        if range.count == 2 {
-                            if range[1] > 1 {
-                                Text("+\(range[1].decimalConversion(1)) ONLY").tag(range)
-                            } else {
-                                Text("\(range[0].decimalConversion(1)) ONLY").tag(range)
-                            }
-                        } else if range.count == 3 {
-                            Text("\(range[0].decimalConversion(1))/+\(range[2].decimalConversion(1))").tag(range)
-                        } else {
-                            Text("All combinations").tag(range)
-                        }
-            
-                    }
-                }, label: {EmptyView()})
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(2)
-                
-                Divider()
-                    .overlay(Color.white)
-                
-                Text("Bandwidth").bold()
-                Picker(selection: $viewModel.bandwidthRangePicker, content: {
-                    Text("1.5").tag(0)
-                    Text("3.0").tag(1)
-                }, label: {EmptyView()})
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(2)
-                
-                Divider()
-                    .overlay(Color.white)
-                
-                Text("Number of Bands").bold()
-                Picker(selection: $viewModel.numOfBandsPicker, content: {
-                    Text("One Band").tag(0)
-                    Text("Two Bands").tag(1)
-                    Text("Three Bands").tag(2)
-                }, label: {EmptyView()})
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(2)
-                
-                Divider()
-                    .overlay(Color.white)
-                
-                Text("Frequency Range").bold()
-                HStack {
-                    Picker(selection: $viewModel.numOfBandsPicker, content: {
-                        Text("63").tag(0)
-                    }, label: {Text("START")})
-                        .background(.white)
-                        .cornerRadius(8)
-                        .padding(2)
-                    Picker(selection: $viewModel.numOfBandsPicker, content: {
-                        Text("16000").tag(0)
-                    }, label: {Text("END")})
-                        .background(.white)
-                        .cornerRadius(8)
-                        .padding(2)
-                }
-                Spacer()
-            }
-            .fixedSize(horizontal: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/, vertical: false)
-            .safeAreaPadding(.top, 60)
-            .foregroundColor(.white)
-        }
-    }
-}
-
-struct SideBar: View {
-    @ObservedObject var viewModel: EqualizerViewModel
-    let width: CGFloat
-    let menuOpened: Bool
-    let toggleMenu: () -> Void
-    
-    var body: some View {
-        ZStack {
-            GeometryReader { _ in
-                EmptyView()
-            }
-            .background(Color.gray.opacity(0.5))
-            .opacity(self.menuOpened ? 1 : 0)
-            .animation(.easeIn.delay(0.25), value: self.menuOpened)
-            .onTapGesture {
-                self.toggleMenu()
-            }
-            HStack {
-                EqualizerSideBarSettings(viewModel: viewModel)
-                    .frame(width: width)
-                    .offset(x: menuOpened ? 0 : -width)
-                    .animation(.default, value: self.menuOpened)
-                Spacer()
-            }
-        }
-    }
-}
-
 struct EqualizerView: View {
     @ObservedObject var viewModel: EqualizerViewModel
     @State var menuOpened = false
@@ -179,9 +47,11 @@ struct EqualizerView: View {
                     
                     Text("TARGET DEBUG: \(Int(viewModel.targetEQ.frequency))hz")
                     Text("TARGET DEBUG: \(Int(viewModel.targetEQ.gain))db")
+                    Text("TARGET DEBUG: \((viewModel.targetEQ.bandwidth))Q")
                     
                     Text("USER DEBUG: \(Int(viewModel.userEQ.frequency))hz")
                     Text("USER DEBUG: \(Int(viewModel.userEQ.gain))db")
+                    Text("USER DEBUG: \((viewModel.userEQ.bandwidth))Q")
                     
                     if viewModel.revealAnswer {
                         Text("TARGET: \(Int(viewModel.targetEQ.frequency))hz")
@@ -190,16 +60,16 @@ struct EqualizerView: View {
                     
                     Spacer()
                     
-                    Text("Frequency: " + String(Int(viewModel.frequencies[Int(viewModel.frequencyPicker)])))
-                    Slider(value: $viewModel.frequencyPicker, in: 0...Double(viewModel.frequencies.count - 1), step: 1)
+                    Text("Frequency: " + String(Int(viewModel.frequencies[Int(viewModel.frequencySlider)])))
+                    Slider(value: $viewModel.frequencySlider, in: 0...Double(viewModel.frequencies.count - 1), step: 1)
                         .disabled(viewModel.disableChoice)
                     
-                    Text("Gain: " + String(Int(viewModel.gainValues[Int(viewModel.gainPicker)])))
-                    Slider(value: $viewModel.gainPicker, in: 0...Double(viewModel.gainValues.count - 1), step: 1)
+                    Text("Gain: " + String(Int(viewModel.gainValues[Int(viewModel.gainSlider)])))
+                    Slider(value: $viewModel.gainSlider, in: 0...Double(viewModel.gainValues.count - 1), step: 1)
                         .disabled(viewModel.disableChoice)
                     
-                    Text("Bandwidth: " + String(viewModel.bandwidths[Int(viewModel.bandwidthPicker)]))
-                    Slider(value: $viewModel.bandwidthPicker, in: 0...Double(viewModel.bandwidths.count - 1), step: 1)
+                    Text("Bandwidth: " + String(viewModel.bandwidths[Int(viewModel.bandwidthSlider)]))
+                    Slider(value: $viewModel.bandwidthSlider, in: 0...Double(viewModel.bandwidths.count - 1), step: 1)
                         .disabled(viewModel.disableChoice)
                     
                     Picker("Select an EQ:", selection: $viewModel.loadedEQPicker) {

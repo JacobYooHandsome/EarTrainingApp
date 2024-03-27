@@ -12,6 +12,7 @@
 		D50BD1662B9FE211007947C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D50BD1652B9FE211007947C9 /* Assets.xcassets */; };
 		D50BD1692B9FE211007947C9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D50BD1682B9FE211007947C9 /* Preview Assets.xcassets */; };
 		D511AA812BB372D80039D67C /* EqualizerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D511AA802BB372D80039D67C /* EqualizerSettingsView.swift */; };
+		D511AA872BB3EA9D0039D67C /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D511AA862BB3EA9D0039D67C /* SideBarView.swift */; };
 		D537A2912BA2D358009B2AD5 /* AudioEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */; };
 		D537A2942BA2D840009B2AD5 /* EqualizerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D537A2932BA2D840009B2AD5 /* EqualizerViewModel.swift */; };
 		D55BD3C22BB24D2A001D48A1 /* LogicKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55BD3C12BB24D2A001D48A1 /* LogicKnob.swift */; };
@@ -29,6 +30,7 @@
 		D50BD1652B9FE211007947C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D50BD1682B9FE211007947C9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D511AA802BB372D80039D67C /* EqualizerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerSettingsView.swift; sourceTree = "<group>"; };
+		D511AA862BB3EA9D0039D67C /* SideBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarView.swift; sourceTree = "<group>"; };
 		D537A2902BA2D358009B2AD5 /* AudioEngineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngineModel.swift; sourceTree = "<group>"; };
 		D537A2922BA2D4C8009B2AD5 /* help.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = help.m4a; sourceTree = "<group>"; };
 		D537A2932BA2D840009B2AD5 /* EqualizerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerViewModel.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				D50BD1632B9FE210007947C9 /* EqualizerView.swift */,
+				D511AA862BB3EA9D0039D67C /* SideBarView.swift */,
 				D511AA802BB372D80039D67C /* EqualizerSettingsView.swift */,
 			);
 			path = Views;
@@ -205,6 +208,7 @@
 				D537A2942BA2D840009B2AD5 /* EqualizerViewModel.swift in Sources */,
 				D55BD3C22BB24D2A001D48A1 /* LogicKnob.swift in Sources */,
 				D511AA812BB372D80039D67C /* EqualizerSettingsView.swift in Sources */,
+				D511AA872BB3EA9D0039D67C /* SideBarView.swift in Sources */,
 				D5711AE42BA4616100B5C14D /* EQBand.swift in Sources */,
 				D537A2912BA2D358009B2AD5 /* AudioEngineModel.swift in Sources */,
 				D50BD1642B9FE210007947C9 /* EqualizerView.swift in Sources */,
