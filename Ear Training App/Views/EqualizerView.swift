@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+extension Float {
+    func decimalConversion(_ number: Int) -> String {
+        String(self.formatted(.number.precision(.fractionLength(number))))
+    }
+}
+
 struct EqualizerSideBarSettings: View {
     @ObservedObject var viewModel: EqualizerViewModel
     
@@ -34,19 +40,20 @@ struct EqualizerSideBarSettings: View {
                 
                 Text("Gain Range").bold()
                 Picker(selection: $viewModel.gainRangePicker, content: {
-                    Text("+9.0 only").tag(0)
-                    Text("+6.0 only").tag(1)
-                    Text("+3.0 only").tag(2)
-                    
-                    Text("+9.0/-9.0").tag(3)
-                    Text("+6.0/-6.0").tag(4)
-                    Text("+3.0/-3.0").tag(5)
-                    
-                    Text("-3.0 only").tag(6)
-                    Text("-6.0 only").tag(7)
-                    Text("-9.0 only").tag(8)
-                    
-                    Text("All combinations").tag(9)
+                    ForEach(viewModel.gainRanges, id:\.self) { range in
+                        if range.count == 2 {
+                            if range[1] > 1 {
+                                Text("+\(range[1].decimalConversion(1)) ONLY").tag(range)
+                            } else {
+                                Text("\(range[0].decimalConversion(1)) ONLY").tag(range)
+                            }
+                        } else if range.count == 3 {
+                            Text("\(range[0].decimalConversion(1))/+\(range[2].decimalConversion(1))").tag(range)
+                        } else {
+                            Text("All combinations").tag(range)
+                        }
+            
+                    }
                 }, label: {EmptyView()})
                     .background(.white)
                     .cornerRadius(8)
@@ -169,6 +176,12 @@ struct EqualizerView: View {
                             .cornerRadius(8)
                         }
                     }
+                    
+                    Text("TARGET DEBUG: \(Int(viewModel.targetEQ.frequency))hz")
+                    Text("TARGET DEBUG: \(Int(viewModel.targetEQ.gain))db")
+                    
+                    Text("USER DEBUG: \(Int(viewModel.userEQ.frequency))hz")
+                    Text("USER DEBUG: \(Int(viewModel.userEQ.gain))db")
                     
                     if viewModel.revealAnswer {
                         Text("TARGET: \(Int(viewModel.targetEQ.frequency))hz")

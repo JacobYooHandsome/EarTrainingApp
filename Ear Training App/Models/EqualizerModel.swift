@@ -25,6 +25,7 @@ struct EqualizerModel {
     static private (set) var frequencies: [Float] = [63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
     
     private (set) var frequencyResolutions: [Float] = [1, 1/3]
+    private (set) var gainRanges: [[Float]] = [[0, 9], [0, 6], [0, 3], [-3, 0], [-6, 0], [-9, 0], [-9, 0, 9], [-6, 0, 6], [-3, 0, 3], [-9, -6, -3, 0, 3, 6, 9]]
     
     // if the userEQBand is changed, then load the new changes into the Equalizer
     private (set) var userEQ: EQBand = .init(bandwidth: 1.5, bypass: false, frequency: 63, gain: 9) {
@@ -62,15 +63,20 @@ struct EqualizerModel {
     // Game functions
     mutating func checkEQ() {
         revealAnswer = true
-        correct = (userEQ.frequency == targetEQ.frequency)
+        correct = (userEQ.frequency == targetEQ.frequency && userEQ.gain == targetEQ.gain)
     }
     
     mutating func generateTarget() {
-        guard let random = EqualizerModel.frequencies.randomElement() else {
+        guard let randomFreq = EqualizerModel.frequencies.randomElement() else {
+            return
+        }
+        let gainValuesNoZero = EqualizerModel.gainValues.filter { $0 != 0 }
+        guard let randomGain = gainValuesNoZero.randomElement() else {
             return
         }
         revealAnswer = false
-        targetEQ.frequency = random
+        targetEQ.frequency = randomFreq
+        targetEQ.gain = randomGain
         correct = nil
     }
     
@@ -80,6 +86,12 @@ struct EqualizerModel {
         } else if octave == 1/3 {
             EqualizerModel.frequencies = [63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000]
         }
+        generateTarget()
+    }
+    
+    mutating func changeGameGainRange(range: [Float]) {
+        EqualizerModel.gainValues = range
+        userEQ.gain = range[0]
         generateTarget()
     }
     

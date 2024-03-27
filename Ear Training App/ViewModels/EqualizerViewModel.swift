@@ -29,7 +29,7 @@ class EqualizerViewModel : ObservableObject {
     var frequencyPicker: Double = 0 {
         didSet{ equalizerModel.updateUserEQFrequency(index: Int(frequencyPicker)) }
     }
-    var gainPicker: Double = 6 {
+    var gainPicker: Double = 0 {
         didSet{ equalizerModel.updateUserEQGain(index: Int(gainPicker)) }
     }
     var bandwidthPicker: Double = 0 {
@@ -38,12 +38,17 @@ class EqualizerViewModel : ObservableObject {
     
     // Pickers for the settings
     var frequencyResolutions: [Float] { equalizerModel.frequencyResolutions }
-    
     var frequencyResolutionPicker: Float = 1 {
         didSet{ equalizerModel.changeGameFrequencyResolution(octave: frequencyResolutionPicker) }
     }
+    
+    var gainRanges: [[Float]] { equalizerModel.gainRanges}
+    var gainRangePicker: [Float] = [-9, -6, -3, 0, 3, 6, 9] {
+        didSet { equalizerModel.changeGameGainRange(range: gainRangePicker) }
+    }
+    
     var bandwidthRangePicker: Int = 0
-    var gainRangePicker: Int = 0
+    
     var numOfBandsPicker: Int = 0
     var frequencyRangePicker: Int = 0
     
