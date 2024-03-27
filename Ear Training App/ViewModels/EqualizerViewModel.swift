@@ -12,42 +12,46 @@ class EqualizerViewModel : ObservableObject {
     @Published private var equalizerModel = EqualizerModel()
     
     // All copied variables from model
-    var frequencies : [Float] { EqualizerModel.frequencies }
-    var gainValues : [Float] { EqualizerModel.gainValues }
-    var bandwidths : [Float] { EqualizerModel.bandwidths }
-    var target : EQBand { equalizerModel.target }
-    var userEQ : EQBand { equalizerModel.userEQ }
-    var disableChoice : Bool { equalizerModel.disableChoice }
-    var revealAnswer : Bool { equalizerModel.revealAnswer }
-    var correct : Bool? { equalizerModel.correct }
+    var frequencies: [Float] { EqualizerModel.frequencies }
+    var gainValues: [Float] { EqualizerModel.gainValues }
+    var bandwidths: [Float] { EqualizerModel.bandwidths }
+    var targetEQ: EQBand { equalizerModel.targetEQ }
+    var userEQ: EQBand { equalizerModel.userEQ }
+    var disableChoice: Bool { equalizerModel.disableChoice }
+    var revealAnswer: Bool { equalizerModel.revealAnswer }
+    var correct: Bool? { equalizerModel.correct }
     
-    var loadedEQIndex : Int = 0 {
-        didSet{
-            equalizerModel.chooseLoadEQBand(index: loadedEQIndex)
-        }
+    
+    // The pickers that control the model
+    var loadedEQPicker: Int = 0 {
+        didSet{ equalizerModel.toggleEQ(index: loadedEQPicker) }
+    }
+    var frequencyPicker: Double = 0 {
+        didSet{ equalizerModel.updateUserEQFrequency(index: Int(frequencyPicker)) }
+    }
+    var gainPicker: Double = 6 {
+        didSet{ equalizerModel.updateUserEQGain(index: Int(gainPicker)) }
+    }
+    var bandwidthPicker: Double = 0 {
+        didSet{ equalizerModel.updateUserEQBandwidth(index: Int(bandwidthPicker)) }
     }
     
-    var frequencyPickerNumber : Double = 0 {
-        didSet{
-            equalizerModel.updateUserEQFrequency(index: Int(frequencyPickerNumber))
-        }
+    // Pickers for the settings
+    var frequencyResolutions: [Float] { equalizerModel.frequencyResolutions }
+    
+    var frequencyResolutionPicker: Float = 1 {
+        didSet{ equalizerModel.changeGameFrequencyResolution(octave: frequencyResolutionPicker) }
     }
-    var gainPickerNumber : Double = 6 {
-        didSet{
-            equalizerModel.updateUserEQGain(index: Int(gainPickerNumber))
-        }
-    }
-    var bandwidthPickerNumber : Double = 0 {
-        didSet{
-            equalizerModel.updateUserEQBandwidth(index: Int(bandwidthPickerNumber))
-        }
-    }
+    var bandwidthRangePicker: Int = 0
+    var gainRangePicker: Int = 0
+    var numOfBandsPicker: Int = 0
+    var frequencyRangePicker: Int = 0
     
     // MARK: - Intents
     
     func playOrPause() { audioEngineModel.playOrPause() }
     
-    func loadEQBand(eqband : EQBand) { equalizerModel.loadEQBand(eqband: eqband) }
+    func loadEQBand(eqband: EQBand) { equalizerModel.loadEQBand(eqband: eqband) }
     
     func toggleBypass() { equalizerModel.toggleBypass() }
     
@@ -58,4 +62,6 @@ class EqualizerViewModel : ObservableObject {
     func generateQuestion() { equalizerModel.generateTarget() }
     
     func checkEQ() { equalizerModel.checkEQ() }
+    
+    func togglePlayStartGame() { equalizerModel.togglePlayStartGame() }
 }

@@ -8,25 +8,104 @@
 import SwiftUI
 
 struct EqualizerSideBarSettings: View {
+    @ObservedObject var viewModel: EqualizerViewModel
+    
     var body: some View {
         ZStack {
-            Color(.gray)
+            Color(.darkGray)
             
-            VStack(alignment: .leading, spacing: 0) {
-                Text("Frequency Resolution")
-                Text("Bandwidth")
-                Text("Frequency Range")
-                Text("Gain Range")
-                Text("Number of Bands")
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Frequency Resolution").bold()
+                Picker(selection: $viewModel.frequencyResolutionPicker, content: {
+                    ForEach(viewModel.frequencyResolutions, id:\.self) { reso in
+                        if reso == 1 {
+                            Text("1 Octave").tag(reso)
+                        } else {
+                            Text("1/3 Octave").tag(reso)
+                        }
+                    }
+                }, label: {EmptyView()})
+                    .background(.white)
+                    .cornerRadius(8)
+                    .padding(2)
+                
+                Divider()
+                    .overlay(Color.white)
+                
+                Text("Gain Range").bold()
+                Picker(selection: $viewModel.gainRangePicker, content: {
+                    Text("+9.0 only").tag(0)
+                    Text("+6.0 only").tag(1)
+                    Text("+3.0 only").tag(2)
+                    
+                    Text("+9.0/-9.0").tag(3)
+                    Text("+6.0/-6.0").tag(4)
+                    Text("+3.0/-3.0").tag(5)
+                    
+                    Text("-3.0 only").tag(6)
+                    Text("-6.0 only").tag(7)
+                    Text("-9.0 only").tag(8)
+                    
+                    Text("All combinations").tag(9)
+                }, label: {EmptyView()})
+                    .background(.white)
+                    .cornerRadius(8)
+                    .padding(2)
+                
+                Divider()
+                    .overlay(Color.white)
+                
+                Text("Bandwidth").bold()
+                Picker(selection: $viewModel.bandwidthRangePicker, content: {
+                    Text("1.5").tag(0)
+                    Text("3.0").tag(1)
+                }, label: {EmptyView()})
+                    .background(.white)
+                    .cornerRadius(8)
+                    .padding(2)
+                
+                Divider()
+                    .overlay(Color.white)
+                
+                Text("Number of Bands").bold()
+                Picker(selection: $viewModel.numOfBandsPicker, content: {
+                    Text("One Band").tag(0)
+                    Text("Two Bands").tag(1)
+                    Text("Three Bands").tag(2)
+                }, label: {EmptyView()})
+                    .background(.white)
+                    .cornerRadius(8)
+                    .padding(2)
+                
+                Divider()
+                    .overlay(Color.white)
+                
+                Text("Frequency Range").bold()
+                HStack {
+                    Picker(selection: $viewModel.numOfBandsPicker, content: {
+                        Text("63").tag(0)
+                    }, label: {Text("START")})
+                        .background(.white)
+                        .cornerRadius(8)
+                        .padding(2)
+                    Picker(selection: $viewModel.numOfBandsPicker, content: {
+                        Text("16000").tag(0)
+                    }, label: {Text("END")})
+                        .background(.white)
+                        .cornerRadius(8)
+                        .padding(2)
+                }
                 Spacer()
             }
-            .safeAreaPadding(.top, 50)
+            .fixedSize(horizontal: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/, vertical: false)
+            .safeAreaPadding(.top, 60)
             .foregroundColor(.white)
         }
     }
 }
 
 struct SideBar: View {
+    @ObservedObject var viewModel: EqualizerViewModel
     let width: CGFloat
     let menuOpened: Bool
     let toggleMenu: () -> Void
@@ -34,11 +113,7 @@ struct SideBar: View {
     var body: some View {
         ZStack {
             GeometryReader { _ in
-                HStack {
-                    EqualizerSideBarSettings()
-                        .frame(width: width)
-                        .offset(x: menuOpened ? 0 : -width)
-                }
+                EmptyView()
             }
             .background(Color.gray.opacity(0.5))
             .opacity(self.menuOpened ? 1 : 0)
@@ -46,8 +121,13 @@ struct SideBar: View {
             .onTapGesture {
                 self.toggleMenu()
             }
-            
-            
+            HStack {
+                EqualizerSideBarSettings(viewModel: viewModel)
+                    .frame(width: width)
+                    .offset(x: menuOpened ? 0 : -width)
+                    .animation(.default, value: self.menuOpened)
+                Spacer()
+            }
         }
     }
 }
@@ -60,12 +140,12 @@ struct EqualizerView: View {
         ZStack {
             NavigationStack{
                 VStack {
-                    
+                    Spacer()
                     if let correct = viewModel.correct {
                         if correct {
-                            Text("CORRECT!!!")
+                            Text("CORRECT!!!").bold()
                         } else {
-                            Text("WRONGG!!! review your answer...")
+                            Text("WRONGG!!! review your answer...").bold()
                         }
                     }
                     
@@ -90,23 +170,26 @@ struct EqualizerView: View {
                         }
                     }
                     
-                    Text("Frequency: " + String(Int(viewModel.frequencies[Int(viewModel.frequencyPickerNumber)])))
-                    Slider(value: $viewModel.frequencyPickerNumber, in: 0...Double(viewModel.frequencies.count - 1), step: 1)
-                        .disabled(viewModel.disableChoice)
-                    
-                    Text("Gain: " + String(Int(viewModel.gainValues[Int(viewModel.gainPickerNumber)])))
-                    Slider(value: $viewModel.gainPickerNumber, in: 0...Double(viewModel.gainValues.count - 1), step: 1)
-                        .disabled(viewModel.disableChoice)
-                    
-                    Text("Bandwidth: " + String(viewModel.bandwidths[Int(viewModel.bandwidthPickerNumber)]))
-                    Slider(value: $viewModel.bandwidthPickerNumber, in: 0...Double(viewModel.bandwidths.count - 1), step: 1)
-                        .disabled(viewModel.disableChoice)
-                    
                     if viewModel.revealAnswer {
-                        Text("TARGET: \(viewModel.target.frequency)")
+                        Text("TARGET: \(Int(viewModel.targetEQ.frequency))hz")
+                        Text("USER: \(Int(viewModel.userEQ.frequency))hz")
                     }
                     
-                    Picker("Select an EQ:", selection: $viewModel.loadedEQIndex) {
+                    Spacer()
+                    
+                    Text("Frequency: " + String(Int(viewModel.frequencies[Int(viewModel.frequencyPicker)])))
+                    Slider(value: $viewModel.frequencyPicker, in: 0...Double(viewModel.frequencies.count - 1), step: 1)
+                        .disabled(viewModel.disableChoice)
+                    
+                    Text("Gain: " + String(Int(viewModel.gainValues[Int(viewModel.gainPicker)])))
+                    Slider(value: $viewModel.gainPicker, in: 0...Double(viewModel.gainValues.count - 1), step: 1)
+                        .disabled(viewModel.disableChoice)
+                    
+                    Text("Bandwidth: " + String(viewModel.bandwidths[Int(viewModel.bandwidthPicker)]))
+                    Slider(value: $viewModel.bandwidthPicker, in: 0...Double(viewModel.bandwidths.count - 1), step: 1)
+                        .disabled(viewModel.disableChoice)
+                    
+                    Picker("Select an EQ:", selection: $viewModel.loadedEQPicker) {
                         Text("TARGET EQ").tag(0)
                         Text("BYPASS").tag(1)
                         Text("USER EQ").tag(2)
@@ -114,12 +197,15 @@ struct EqualizerView: View {
                     .labelsHidden()
                     .pickerStyle(SegmentedPickerStyle())
                     
-                    Button("PLAYorPAUSE") {
-                        viewModel.playOrPause()
-                    }
+                    Spacer()
+                    
+                    Button(action: { viewModel.playOrPause(); viewModel.togglePlayStartGame()}, label: {
+                        Image(systemName: "play.circle.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                    })
                     .padding()
-                    .foregroundColor(.white)
-                    .background(Color.blue)
+                    .foregroundColor(.blue)
                     .cornerRadius(8)
                 }
                 .padding()
@@ -128,16 +214,14 @@ struct EqualizerView: View {
                     Button(action: {
                         menuOpened.toggle()
                     }, label: {
-                        Text("Settings")
-                            .frame(width: 100, height: 50, alignment: .center)
-                            .foregroundColor(.white)
-                            .background(.blue)
-                            .cornerRadius(8)
+                        Image(systemName: "gearshape.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
                     })
                     
                 }
             }
-            SideBar(width: UIScreen.main.bounds.width/1.6, menuOpened: menuOpened, toggleMenu: toggleMenu)
+            SideBar(viewModel: viewModel, width: UIScreen.main.bounds.width/2, menuOpened: menuOpened, toggleMenu: toggleMenu)
         }
         .ignoresSafeArea(.all)
     }

@@ -17,11 +17,6 @@ struct AudioEngineModel {
     private var needsFileScheduled = true
     private var isPlaying = false
     
-    // Variables related to the view
-    private (set) var disableChoice = true
-    private (set) var revealAnswer = false
-    private (set) var correct : Bool?
-    
     // initalizes the targetEQ question and sets up the audio
     init() {
         setupAudio()
